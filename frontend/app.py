@@ -75,10 +75,11 @@ def getTopK(k, q, db, ehr_data):
             [INST]<<SYS>>  You are an assistant for helping patients find clinical trials based on their profiles. Use the following pieces of retrieved context to answer the question.
             If you don't know the answer, just say that you don't know. Never, ever make stuff up since this is a matter of life and death for patients. Return AT MOST 3 trials. Use three sentences maximum and keep the answer concise. ENSURE YOUR ANSWER
             ALWAYS IS THE EXACT TITLE OF THE TRIAL. Nothing should be changed. Specifically, look for Title keyword followed by the title of the study itself. Also ensure
-            you are providing the correct trial ID identifier. Context: {ehr_data} <</SYS>>
+            you are providing the correct trial ID identifier. EHR data of patient: {ehr_data} Context: {context} <</SYS>>
             Question: {question}
             Answer: [/INST]
-            """)
+            """ )
+    
     #f"You are a smart agent that seeks to match patients with clinical trials. A question would be asked to you and relevant information would be provided.\
     #Your task is to answer the question using the information provided. Be extremely concise and use five sentences maximum. Question: {question} and Context: {context}"
 
@@ -92,7 +93,7 @@ def getTopK(k, q, db, ehr_data):
     )
 
     qa_chain = ({"context" : retriever,
-            "question" : RunnablePassthrough()}
+            "question" : RunnablePassthrough(), "ehr_data": RunnablePassthrough()}
                     | template | model  | StrOutputParser()
     )
 
